@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de Producción Musical en Ableton Live</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f2ec;
+    --cream: #ede9e0;
+    --accent: #c8f542;
+    --muted: #888880;
+    --border: #2a2a2a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.5rem 4rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+  }
+  .nav-logo {
+    font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted);
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: 0.7rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-left {
+    padding: 6rem 4rem;
+    display: flex; flex-direction: column; justify-content: center;
+    border-right: 1px solid var(--border);
+    animation: fadeUp 0.9s ease forwards;
+    opacity: 0;
+  }
+  .hero-tag {
+    font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 2rem;
+  }
+  .hero-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3rem, 5vw, 5.5rem);
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 2rem;
+  }
+  .hero-title em { font-style: italic; color: var(--accent); }
+  .hero-desc {
+    font-size: 0.85rem; line-height: 1.8; color: var(--muted);
+    max-width: 400px; margin-bottom: 3rem;
+  }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 1rem;
+    background: var(--accent); color: var(--black);
+    padding: 1rem 2rem; text-decoration: none;
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    font-weight: 500;
+    transition: transform 0.2s, background 0.2s;
+    width: fit-content;
+  }
+  .hero-cta:hover { transform: translateY(-2px); background: #d4ff50; }
+
+  .hero-right {
+    padding: 6rem 4rem;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    animation: fadeUp 0.9s 0.2s ease forwards;
+    opacity: 0;
+  }
+  .hero-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+    border: 1px solid var(--border);
+  }
+  .stat-box {
+    padding: 2.5rem 2rem;
+    border: 1px solid var(--border);
+  }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3.5rem; color: var(--white); line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .stat-label {
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .stat-box.accent { background: var(--accent); }
+  .stat-box.accent .stat-num,
+  .stat-box.accent .stat-label { color: var(--black); }
+
+  /* PROGRESS */
+  #progress {
+    padding: 8rem 4rem;
+    border-bottom: 1px solid var(--border);
+    animation: fadeUp 0.9s ease forwards;
+    opacity: 0;
+  }
+  .section-header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 4rem;
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.5rem;
+  }
+  .section-meta {
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .chapters-grid {
+    display: grid; gap: 2px;
+  }
+  .chapter {
+    display: grid; grid-template-columns: 3rem 1fr auto;
+    align-items: center; gap: 2rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+    cursor: default;
+  }
+  .chapter:hover { padding-left: 1rem; background: rgba(255,255,255,0.02); }
+  .ch-num {
+    font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em;
+  }
+  .ch-info { display: flex; flex-direction: column; gap: 0.6rem; }
+  .ch-title { font-size: 0.9rem; color: var(--white); }
+  .ch-bar-wrap { height: 2px; background: var(--border); flex: 1; }
+  .ch-bar { height: 100%; background: var(--accent); transition: width 1s ease; }
+  .ch-status {
+    font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 0.3rem 0.8rem; border: 1px solid;
+    white-space: nowrap;
+  }
+  .ch-status.done { color: var(--accent); border-color: var(--accent); }
+  .ch-status.wip  { color: #f59e0b; border-color: #f59e0b; }
+  .ch-status.next { color: var(--muted); border-color: var(--border); }
+
+  /* UPDATES */
+  #updates {
+    padding: 8rem 4rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .updates-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+    margin-top: 4rem;
+  }
+  .update-card {
+    border: 1px solid var(--border);
+    padding: 2.5rem;
+    transition: border-color 0.2s;
+  }
+  .update-card:hover { border-color: var(--accent); }
+  .update-date {
+    font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1.5rem;
+  }
+  .update-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem; line-height: 1.3;
+    margin-bottom: 1rem;
+  }
+  .update-desc {
+    font-size: 0.78rem; line-height: 1.7; color: var(--muted);
+  }
+
+  /* GALLERY */
+  #gallery {
+    padding: 8rem 4rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 280px 280px;
+    gap: 2px;
+    margin-top: 4rem;
+  }
+  .gallery-item {
+    background: var(--border);
+    position: relative; overflow: hidden;
+    display: flex; align-items: flex-end; padding: 1.5rem;
+  }
+  .gallery-item:first-child { grid-row: span 2; }
+  .gallery-bg {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 5rem; opacity: 0.08;
+    transition: opacity 0.3s, transform 0.5s;
+  }
+  .gallery-item:hover .gallery-bg { opacity: 0.15; transform: scale(1.05); }
+  .gallery-label {
+    position: relative; z-index: 1;
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .gallery-item.highlight { background: #141414; border: 1px solid var(--accent); }
+  .gallery-item.highlight .gallery-label { color: var(--accent); }
+
+  /* ABOUT */
+  #about {
+    padding: 8rem 4rem;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .about-left {}
+  .about-avatar {
+    width: 100%; aspect-ratio: 3/4;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 6rem; margin-bottom: 2rem;
+  }
+  .about-right {
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .about-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem; margin-bottom: 0.5rem;
+  }
+  .about-role {
+    font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 2rem;
+  }
+  .about-bio {
+    font-size: 0.85rem; line-height: 1.9; color: var(--muted);
+    margin-bottom: 3rem;
+  }
+  .about-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 0.4rem 0.9rem; border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  /* SUBSCRIBE */
+  #subscribe {
+    padding: 8rem 4rem;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8rem; align-items: center;
+  }
+  .subscribe-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    line-height: 1.1;
+  }
+  .subscribe-title em { font-style: italic; color: var(--accent); }
+  .subscribe-form { display: flex; flex-direction: column; gap: 1rem; }
+  .form-row { display: flex; gap: 2px; }
+  .form-input {
+    flex: 1; background: transparent; border: 1px solid var(--border);
+    padding: 1rem 1.5rem; color: var(--white);
+    font-family: 'DM Mono', monospace; font-size: 0.8rem;
+    outline: none; transition: border-color 0.2s;
+  }
+  .form-input::placeholder { color: var(--muted); }
+  .form-input:focus { border-color: var(--accent); }
+  .form-btn {
+    background: var(--accent); color: var(--black);
+    border: none; padding: 1rem 2rem;
+    font-family: 'DM Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    cursor: pointer; font-weight: 500;
+    transition: background 0.2s;
+  }
+  .form-btn:hover { background: #d4ff50; }
+  .form-note {
+    font-size: 0.65rem; color: var(--muted); letter-spacing: 0.05em;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 4rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-copy { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+  .footer-made { font-size: 0.65rem; color: var(--muted); }
+  .footer-made span { color: var(--accent); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 2rem; }
+    .nav-links { display: none; }
+    #hero { grid-template-columns: 1fr; }
+    .hero-left, .hero-right { padding: 3rem 2rem; border: none; }
+    #progress, #updates, #gallery, #subscribe { padding: 4rem 2rem; }
+    .updates-grid { grid-template-columns: 1fr; }
+    .gallery-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+    .gallery-item:first-child { grid-row: span 1; }
+    #about { grid-template-columns: 1fr; gap: 2rem; padding: 4rem 2rem; }
+    #subscribe { grid-template-columns: 1fr; gap: 2rem; }
+    footer { padding: 1.5rem 2rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Ableton Live // Guía</div>
+  <ul class="nav-links">
+    <li><a href="#progress">Capítulos</a></li>
+    <li><a href="#updates">Novedades</a></li>
+    <li><a href="#gallery">Galería</a></li>
+    <li><a href="#about">Autor</a></li>
+    <li><a href="#subscribe">Suscribirse</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <p class="hero-tag">Libro en progreso · 2024–2025</p>
+    <h1 class="hero-title">
+      Guía de<br>
+      Producción<br>
+      Musical en<br>
+      <em>Ableton Live</em>
+    </h1>
+    <p class="hero-desc">
+      De cero a productor. Una guía práctica, honesta y completa sobre producción musical en Ableton Live. Escrita en tiempo real, capítulo a capítulo.
+    </p>
+    <a href="#subscribe" class="hero-cta">
+      Seguir el progreso →
+    </a>
+  </div>
+  <div class="hero-right">
+    <div class="hero-stats">
+      <div class="stat-box">
+        <div class="stat-num">12</div>
+        <div class="stat-label">Capítulos planificados</div>
+      </div>
+      <div class="stat-box accent">
+        <div class="stat-num">4</div>
+        <div class="stat-label">Capítulos escritos</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">33%</div>
+        <div class="stat-label">Progreso total</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">↑</div>
+        <div class="stat-label">Actualización semanal</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRESS -->
+<section id="progress" class="reveal">
+  <div class="section-header">
+    <h2 class="section-title">Capítulos</h2>
+    <span class="section-meta">4 / 12 completados</span>
+  </div>
+  <div class="chapters-grid">
+
+    <div class="chapter">
+      <span class="ch-num">01</span>
+      <div class="ch-info">
+        <span class="ch-title">Introducción a Ableton Live</span>
+        <div class="ch-bar-wrap"><div class="ch-bar" style="width:100%"></div></div>
+      </div>
+      <span class="ch-status done">Listo</span>
+    </div>
+
+    <div class="chapter">
+      <span class="ch-num">02</span>
+      <div class="ch-info">
+        <span class="ch-title">La Interfaz y el Flujo de Trabajo</span>
+        <div class="ch-bar-wrap"><div class="ch-bar" style="width:100%"></div></div>
+      </div>
+      <span class="ch-status done">Listo</span>
+    </div>
+
+    <div class="chapter">
+      <span class="ch-num">03</span>
+      <div class="ch-info">
+        <span class="ch-title">MIDI y Síntesis de Sonido</span>
+        <div class="ch-bar-wrap"><div class="ch-bar" style="width:100%"></div></div>
+      </div>
+      <span class="ch-status done">Listo</span>
+    </div>
+
+    <div class="chapter">
+      <span class="ch-num">04</span>
+      <div class="ch-info">
+        <span class="ch-title">Sampling y Manejo de Audio</span>
+        <div class="ch-bar-wrap"><div class="ch-bar" style="width:100%"></div></div>
+      </div>
+      <span class="ch-status done">Listo</span>
+    </div>
+
+    <div class="chapter">
+      <span class="ch-num">05</span>
+      <div class="ch-info">
+        <span class="ch-title">Mixing: Fundamentos</span>
+        <div class="ch-bar-wrap"><div class="ch-bar" style="width:65%"></div></div>
+      </div>
+      <span class="ch-status wip">En progreso</span>
+    </div>
+
+    <div class="chapter">
+      <span class="ch-num">06</span>
+      <div class="ch-info">
+        <span class="ch-title">Efectos y Procesamiento</span>
+        <div class="ch-bar-wrap"><div class="ch-bar" style="width:0%"></div></div>
+      </div>
+      <span class="ch-status next">Próximo</span>
+    </div>
+
+    <div class="chapter">
+      <span class="ch-num">07</span>
+      <div class="ch-info">
+        <span class="ch-title">Automatización y Modulación</span>
+        <div class="ch-bar-wrap"><div class="ch-bar" style="width:0%"></div></div>
+      </div>
+      <span class="ch-status next">Próximo</span>
+    </div>
+
+    <div class="chapter">
+      <span class="ch-num">08</span>
+      <div class="ch-info">
+        <span class="ch-title">Arreglos y Estructura de una Canción</span>
+        <div class="ch-bar-wrap"><div class="ch-bar" style="width:0%"></div></div>
+      </div>
+      <span class="ch-status next">Próximo</span>
+    </div>
+
+    <div class="chapter">
+      <span class="ch-num">09–12</span>
+      <div class="ch-info">
+        <span class="ch-title">Mastering, Live Performance, Exportación y más...</span>
+        <div class="ch-bar-wrap"><div class="ch-bar" style="width:0%"></div></div>
+      </div>
+      <span class="ch-status next">Por definir</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- UPDATES -->
+<section id="updates" class="reveal">
+  <div class="section-header">
+    <h2 class="section-title">Novedades</h2>
+    <span class="section-meta">Últimas actualizaciones</span>
+  </div>
+  <div class="updates-grid">
+    <div class="update-card">
+      <p class="update-date">Febrero 2025</p>
+      <h3 class="update-title">Capítulo 4 publicado: Sampling y Audio</h3>
+      <p class="update-desc">Cubrimos desde cómo importar samples hasta técnicas de warping y time-stretching que todo productor necesita dominar.</p>
+    </div>
+    <div class="update-card">
+      <p class="update-date">Enero 2025</p>
+      <h3 class="update-title">Avance del Capítulo 5: Mixing</h3>
+      <p class="update-desc">Ya tenemos el 65% del capítulo sobre mezcla escrito. Ganancia, EQ y compresión como nunca te las explicaron.</p>
+    </div>
+    <div class="update-card">
+      <p class="update-date">Diciembre 2024</p>
+      <h3 class="update-title">El proyecto toma forma</h3>
+      <p class="update-desc">Después de meses de planificación, los primeros tres capítulos están listos. La guía más completa en español sobre Ableton Live.</p>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery" class="reveal">
+  <div class="section-header">
+    <h2 class="section-title">Imágenes del proceso</h2>
+    <span class="section-meta">Detrás de escena</span>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item highlight">
+      <div class="gallery-bg">🎛️</div>
+      <span class="gallery-label">Session View · Ableton Live 12</span>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-bg">🎵</div>
+      <span class="gallery-label">Clips y loops</span>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-bg">🎹</div>
+      <span class="gallery-label">Piano Roll MIDI</span>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-bg">🔊</div>
+      <span class="gallery-label">Mixer & Sends</span>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-bg">📊</div>
+      <span class="gallery-label">Automatización</span>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="reveal">
+  <div class="about-left">
+    <div class="about-avatar">🎧</div>
+  </div>
+  <div class="about-right">
+    <h2 class="about-name">El Autor</h2>
+    <p class="about-role">Productor Musical · Escritor · Docente</p>
+    <p class="about-bio">
+      Llevo más de 10 años produciendo música y enseñando a otros cómo hacerlo. Esta guía nace de la frustración de no encontrar un recurso completo, en español y sin rodeos, sobre producción con Ableton Live.<br><br>
+      La escribo capítulo a capítulo, en tiempo real, compartiendo el proceso con mi comunidad. Cada actualización es un paso más hacia el libro definitivo.
+    </p>
+    <div class="about-tags">
+      <span class="tag">Ableton Live</span>
+      <span class="tag">Producción Musical</span>
+      <span class="tag">Mixing</span>
+      <span class="tag">Sound Design</span>
+      <span class="tag">Español</span>
+      <span class="tag">10+ años</span>
+    </div>
+  </div>
+</section>
+
+<!-- SUBSCRIBE -->
+<section id="subscribe" class="reveal">
+  <div>
+    <h2 class="subscribe-title">
+      Seguí el libro<br>
+      <em>mientras nace.</em>
+    </h2>
+  </div>
+  <div>
+    <div class="subscribe-form">
+      <p style="font-size:0.8rem; color:var(--muted); line-height:1.7; margin-bottom:1rem;">
+        Suscribite y recibí una notificación cada vez que publique un nuevo capítulo, avance o novedad del libro.
+      </p>
+      <div class="form-row">
+        <input type="email" class="form-input" placeholder="tu@email.com">
+        <button class="form-btn">Suscribirse</button>
+      </div>
+      <p class="form-note">Sin spam. Solo actualizaciones del libro. Podés darte de baja cuando quieras.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-copy">© 2025 · Guía de Producción Musical en Ableton Live</p>
+  <p class="footer-made">Hecho con <span>♥</span> y mucho café</p>
+</footer>
+
+<script>
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
